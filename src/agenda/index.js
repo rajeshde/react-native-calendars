@@ -231,7 +231,7 @@ export default class AgendaView extends Component {
       this.loadReservations(props);
     }
     if (props.selected !== this.props.selected) {
-      this.setState({selectedDay: parseDate(this.props.selected)});
+      this.setState({selectedDay: parseDate(props.selected)});
     }
   }
 
@@ -242,7 +242,7 @@ export default class AgendaView extends Component {
     const prevYear = getYear(prevState.selectedDay.toString());
     const year = getYear(this.state.selectedDay.toString());
     if (prevYear !== year) {
-      this.props.onYearChange(year);
+      this.props.onYearChange && this.props.onYearChange(year);
     }
   }
 
