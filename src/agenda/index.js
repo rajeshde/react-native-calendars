@@ -189,6 +189,7 @@ export default class AgendaView extends Component {
       clearTimeout(this.scrollTimeout);
       this.scrollTimeout = setTimeout(() => {
         if (this.props.loadItemsForMonth && this._isMounted) {
+          this.props.onYearChangeWhileScrolling(months[0].year, months[1].year);
           this.props.loadItemsForMonth(months[0]);
         }
       }, 200);
@@ -223,6 +224,7 @@ export default class AgendaView extends Component {
   }
 
   componentWillReceiveProps(props) {
+    const getYear = date => date.split('-')[0];
     if (props.items) {
       this.setState({
         firstResevationLoad: false,
@@ -230,19 +232,10 @@ export default class AgendaView extends Component {
     } else {
       this.loadReservations(props);
     }
-    if (props.selected !== this.props.selected) {
+    if (getYear(props.selected) !== getYear(this.props.selected)) {
       this.setState({selectedDay: parseDate(props.selected)});
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const getYear = date => {
-      return date.split(' ')[3];
-    };
-    const prevYear = getYear(prevState.selectedDay.toString());
-    const year = getYear(this.state.selectedDay.toString());
-    if (prevYear !== year) {
-      this.props.onYearChange && this.props.onYearChange(year);
+      this.currentMonth = parseDate(props.selected).clone();
+      this.props.loadItemsForMonth(xdateToData(XDate(props.selected)));
     }
   }
 
@@ -271,6 +264,10 @@ export default class AgendaView extends Component {
 
   _chooseDayFromCalendar(d) {
     this.chooseDay(d, !this.state.calendarScrollable);
+    if (this.props.onDayChange) {
+      const prevDay = xdateToData(this.state.selectedDay);
+      this.props.onDayChange(d, prevDay);
+    }
   }
 
   chooseDay(d, optimisticScroll) {
@@ -335,7 +332,8 @@ export default class AgendaView extends Component {
     });
 
     if (this.props.onDayChange) {
-      this.props.onDayChange(xdateToData(newDate));
+      const prevDay = xdateToData(this.state.selectedDay);
+      this.props.onDayChange(xdateToData(newDate), prevDay);
     }
   }
 
