@@ -189,7 +189,6 @@ export default class AgendaView extends Component {
       clearTimeout(this.scrollTimeout);
       this.scrollTimeout = setTimeout(() => {
         if (this.props.loadItemsForMonth && this._isMounted) {
-          this.props.onYearChangeWhileScrolling(months[0].year, months[1].year);
           this.props.loadItemsForMonth(months[0]);
         }
       }, 200);
@@ -224,7 +223,7 @@ export default class AgendaView extends Component {
   }
 
   componentWillReceiveProps(props) {
-    const getYear = date => date.split('-')[0];
+    const getYear = (date) => date.split('-')[0];
     if (props.items) {
       this.setState({
         firstResevationLoad: false,
@@ -316,7 +315,7 @@ export default class AgendaView extends Component {
         topDay={this.state.topDay}
         onDayChange={this.onDayChange.bind(this)}
         onScroll={() => {}}
-        ref={c => (this.list = c)}
+        ref={(c) => (this.list = c)}
         theme={this.props.theme}
       />
     );
@@ -342,7 +341,7 @@ export default class AgendaView extends Component {
 
     if (!markings) {
       markings = {};
-      Object.keys(this.props.items || {}).forEach(key => {
+      Object.keys(this.props.items || {}).forEach((key) => {
         if (this.props.items[key] && this.props.items[key].length) {
           markings[key] = {marked: true};
         }
@@ -430,7 +429,7 @@ export default class AgendaView extends Component {
       );
       knob = this.state.calendarScrollable ? null : (
         <View style={this.styles.knobContainer}>
-          <View ref={c => (this.knob = c)}>{knobView}</View>
+          <View ref={(c) => (this.knob = c)}>{knobView}</View>
         </View>
       );
     }
@@ -456,7 +455,7 @@ export default class AgendaView extends Component {
               calendarWidth={this.viewWidth}
               theme={this.props.theme}
               onVisibleMonthsChange={this.onVisibleMonthsChange.bind(this)}
-              ref={c => (this.calendar = c)}
+              ref={(c) => (this.calendar = c)}
               minDate={this.props.minDate}
               maxDate={this.props.maxDate}
               current={this.currentMonth}
@@ -496,7 +495,7 @@ export default class AgendaView extends Component {
           ))}
         </Animated.View>
         <Animated.ScrollView
-          ref={c => (this.scrollPad = c)}
+          ref={(c) => (this.scrollPad = c)}
           overScrollMode="never"
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
